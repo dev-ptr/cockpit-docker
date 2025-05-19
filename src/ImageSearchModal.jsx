@@ -19,7 +19,7 @@ import { EmptyStatePanel } from "cockpit-components-empty-state.tsx";
 import { ErrorNotification } from './Notification.jsx';
 import * as client from './client.js';
 import rest from './rest.js';
-import { fallbackRegistries, usePodmanInfo } from './util.js';
+import { fallbackRegistries, usedockerInfo } from './util.js';
 
 import './ImageSearchModal.css';
 
@@ -39,7 +39,7 @@ export const ImageSearchModal = ({ downloadImage, users }) => {
     const [typingTimeout, setTypingTimeout] = useState(null);
 
     let activeConnection = null;
-    const { registries } = usePodmanInfo();
+    const { registries } = usedockerInfo();
     const Dialogs = useDialogs();
     // Registries to use for searching
     const searchRegistries = registries.search && registries.length !== 0 ? registries.search : fallbackRegistries;
@@ -67,7 +67,7 @@ export const ImageSearchModal = ({ downloadImage, users }) => {
         if (searchRegistry !== "") {
             queryRegistries = [searchRegistry];
         }
-        // if a user searches for `docker.io/cockpit` let podman search in the user specified registry.
+        // if a user searches for `docker.io/cockpit` let docker search in the user specified registry.
         if (imageIdentifier.includes('/')) {
             queryRegistries = [""];
         }
@@ -134,7 +134,7 @@ export const ImageSearchModal = ({ downloadImage, users }) => {
     };
 
     return (
-        <Modal isOpen className="podman-search"
+        <Modal isOpen className="docker-search"
                position="top" variant="large"
                onClose={handleClose}
                title={_("Search for an image")}

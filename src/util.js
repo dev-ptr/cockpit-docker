@@ -8,29 +8,29 @@ import * as timeformat from 'timeformat';
 
 const _ = cockpit.gettext;
 
-export const PodmanInfoContext = React.createContext();
-export const usePodmanInfo = () => useContext(PodmanInfoContext);
+export const dockerInfoContext = React.createContext();
+export const usedockerInfo = () => useContext(dockerInfoContext);
 
-export const WithPodmanInfo = ({ value, children }) => {
+export const WithdockerInfo = ({ value, children }) => {
     return (
-        <PodmanInfoContext.Provider value={value}>
+        <dockerInfoContext.Provider value={value}>
             {children}
-        </PodmanInfoContext.Provider>
+        </dockerInfoContext.Provider>
     );
 };
 
-// https://github.com/containers/podman/blob/main/libpod/define/containerstate.go
+// https://github.com/containers/docker/blob/main/libpod/define/containerstate.go
 // "Restarting" comes from special handling of restart case in Application.updateContainer()
 export const states = [_("Exited"), _("Paused"), _("Stopped"), _("Removing"), _("Configured"), _("Created"), _("Restart"), _("Running")];
 
-// https://github.com/containers/podman/blob/main/libpod/define/podstate.go
+// https://github.com/containers/docker/blob/main/libpod/define/podstate.go
 export const podStates = [_("Created"), _("Running"), _("Stopped"), _("Paused"), _("Exited"), _("Error")];
 
 export const fallbackRegistries = ["docker.io", "quay.io"];
 
 export function debug(...args) {
-    if (window.debugging === "all" || window.debugging?.includes("podman"))
-        console.debug("podman", ...args);
+    if (window.debugging === "all" || window.debugging?.includes("docker"))
+        console.debug("docker", ...args);
 }
 
 // containers, pods, images states are indexed by these keys, to make the container IDs

@@ -44,13 +44,13 @@ const ContainerDetails = ({ container }) => {
                         <DescriptionListDescription>{utils.quote_cmdline(container.Config.Cmd)}</DescriptionListDescription>
                     </DescriptionListGroup>
                     }
-                    {Boolean(container.Config?.Labels?.PODMAN_SYSTEMD_UNIT) && (container.uid === 0 || container.uid === null) &&
+                    {Boolean(container.Config?.Labels?.docker_SYSTEMD_UNIT) && (container.uid === 0 || container.uid === null) &&
                     <DescriptionListGroup>
                         <DescriptionListTerm>{_("systemd service")}</DescriptionListTerm>
                         <DescriptionListDescription>
                             <Button variant="link" isInline onClick={
-                                () => cockpit.jump(`/system/services#/${container.Config?.Labels?.PODMAN_SYSTEMD_UNIT}` + (container.uid === null ? "?owner=user" : ""))}>
-                                {cockpit.format(_("View $0"), container.Config?.Labels?.PODMAN_SYSTEMD_UNIT)}
+                                () => cockpit.jump(`/system/services#/${container.Config?.Labels?.docker_SYSTEMD_UNIT}` + (container.uid === null ? "?owner=user" : ""))}>
+                                {cockpit.format(_("View $0"), container.Config?.Labels?.docker_SYSTEMD_UNIT)}
                             </Button>
                         </DescriptionListDescription>
                     </DescriptionListGroup>

@@ -380,21 +380,21 @@ const ImageActions = ({ con, image, onAddNotification, users, downloadImage }) =
 
     const runImage = () => {
         Dialogs.show(
-            <utils.PodmanInfoContext.Consumer>
-                {(podmanInfo) => (
+            <utils.dockerInfoContext.Consumer>
+                {(dockerInfo) => (
                     <DialogsContext.Consumer>
                         {(Dialogs) => (
                             <ImageRunModal
                               users={users}
                               image={image}
                               onAddNotification={onAddNotification}
-                              podmanInfo={podmanInfo}
+                              dockerInfo={dockerInfo}
                               dialogs={Dialogs}
                             />
                         )}
                     </DialogsContext.Consumer>
                 )}
-            </utils.PodmanInfoContext.Consumer>);
+            </utils.dockerInfoContext.Consumer>);
     };
 
     const pullImage = () => {

@@ -160,8 +160,8 @@ const ContainerActions = ({ con, container, onAddNotification, localImages, upda
 
     const actions = [];
     if (isRunning || isPaused) {
-        // TODO: cockpit-podman currently isn't aware of podman quadlets as they don't keep containers around when stopped, failed or not yet started by default.
-        // Allowing a user to stop or restart a container can result in the container disappearing from the list without a way to start it again. Until cockpit-podman
+        // TODO: cockpit-docker currently isn't aware of docker quadlets as they don't keep containers around when stopped, failed or not yet started by default.
+        // Allowing a user to stop or restart a container can result in the container disappearing from the list without a way to start it again. Until cockpit-docker
         // can list quadlets these actions are disabled.
         if (!isSystemdService) {
             actions.push(
@@ -338,12 +338,12 @@ class Containers extends React.Component {
         const image = container.ImageName;
         const isToolboxContainer = container.Config?.Labels?.["com.github.containers.toolbox"] === "true";
         const isDistroboxContainer = container.Config?.Labels?.manager === "distrobox";
-        const isSystemdService = Boolean(container.Config?.Labels?.PODMAN_SYSTEMD_UNIT);
+        const isSystemdService = Boolean(container.Config?.Labels?.docker_SYSTEMD_UNIT);
         let localized_health = null;
 
         // this needs to get along with stub containers from image run dialog, where most properties don't exist yet
-        // HACK: Podman renamed `Healthcheck` to `Health` randomly
-        // https://github.com/containers/podman/commit/119973375
+        // HACK: docker renamed `Healthcheck` to `Health` randomly
+        // https://github.com/containers/docker/commit/119973375
         const healthcheck = container.State?.Health?.Status ?? container.State?.Healthcheck?.Status; // not-covered: only on old version
         const status = container.State?.Status ?? ""; // not-covered: race condition
 
@@ -493,7 +493,7 @@ class Containers extends React.Component {
             return null;
         }
 
-        // As podman does not provide per pod memory/cpu statistics we do the following:
+        // As docker does not provide per pod memory/cpu statistics we do the following:
         // - add up CPU usage to display total CPU use of all containers in the pod
         // - add up memory usage so it displays the total memory of the pod.
         let cpu = 0;
@@ -716,20 +716,20 @@ class Containers extends React.Component {
         const createContainer = (inPod) => {
             if (nonIntermediateImages)
                 Dialogs.show(
-                    <utils.PodmanInfoContext.Consumer>
-                        {(podmanInfo) => (
+                    <utils.dockerInfoContext.Consumer>
+                        {(dockerInfo) => (
                             <DialogsContext.Consumer>
                                 {(Dialogs) => (
                                     <ImageRunModal users={this.props.users}
                                                    localImages={nonIntermediateImages}
                                                    pod={inPod}
                                                    onAddNotification={this.props.onAddNotification}
-                                                   podmanInfo={podmanInfo}
+                                                   dockerInfo={dockerInfo}
                                                    dialogs={Dialogs} />
                                 )}
                             </DialogsContext.Consumer>
                         )}
-                    </utils.PodmanInfoContext.Consumer>);
+                    </utils.dockerInfoContext.Consumer>);
         };
 
         const createPod = () => {
@@ -838,7 +838,7 @@ class Containers extends React.Component {
                                             con = this.props.users.find(u => u.uid === pod.uid).con;
                                             tableProps['aria-label'] = cockpit.format("Containers of pod $0", pod.Name);
                                             podStatus = pod.Status;
-                                            isPodService = Boolean(pod.Labels?.PODMAN_SYSTEMD_UNIT);
+                                            isPodService = Boolean(pod.Labels?.docker_SYSTEMD_UNIT);
                                             caption = pod.Name;
                                         } else {
                                             tableProps['aria-label'] = _("Containers");

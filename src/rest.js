@@ -21,7 +21,7 @@ let call_id = 0;
 const NL = '\n'.charCodeAt(0); // always 10, but avoid magic constant
 const CR = '\r'.charCodeAt(0); // always 13, but avoid magic constant
 
-const PODMAN_SYSTEM_ADDRESS = "/run/podman/podman.sock";
+const docker_SYSTEM_ADDRESS = "/run/docker/docker.sock";
 
 /* uid: null for logged in session user, otherwise standard Unix user ID
  * Return { path, superuser } */
@@ -30,16 +30,16 @@ function getAddress(uid) {
         // FIXME: make this async and call cockpit.user()
         const xrd = sessionStorage.getItem('XDG_RUNTIME_DIR');
         if (xrd)
-            return { path: xrd + "/podman/podman.sock", superuser: null };
+            return { path: xrd + "/docker/docker.sock", superuser: null };
         console.warn("$XDG_RUNTIME_DIR is not present. Cannot use user service.");
         return { path: "", superuser: null };
     }
 
     if (uid === 0)
-        return { path: PODMAN_SYSTEM_ADDRESS, superuser: "require" };
+        return { path: docker_SYSTEM_ADDRESS, superuser: "require" };
 
     if (Number.isInteger(uid))
-        return { path: `/run/user/${uid}/podman/podman.sock`, superuser: "require" };
+        return { path: `/run/user/${uid}/docker/docker.sock`, superuser: "require" };
 
     throw new Error(`getAddress: uid ${uid} not supported`);
 }
@@ -51,7 +51,7 @@ function splitAtNLNL(array) {
             return [array.subarray(0, i), array.subarray(i + 4)];
         }
     }
-    console.error("did not find NLNL in array", array); // not-covered: if this happens, it's a podman bug
+    console.error("did not find NLNL in array", array); // not-covered: if this happens, it's a docker bug
     return [array, null]; // not-covered: dito
 }
 

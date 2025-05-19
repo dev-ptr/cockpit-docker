@@ -23,7 +23,7 @@ import * as utils from './util.js';
 const _ = cockpit.gettext;
 
 export const PodCreateModal = ({ users }) => {
-    const { version, selinuxAvailable } = utils.usePodmanInfo();
+    const { version, selinuxAvailable } = utils.usedockerInfo();
     const [podName, setPodName] = useState(dockerNames.getRandomName());
     const [publish, setPublish] = useState([]);
     const [volumes, setVolumes] = useState([]);

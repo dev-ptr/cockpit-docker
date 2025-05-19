@@ -26,8 +26,8 @@ VM_CUSTOMIZE_FLAGS =
 # the following scenarios need network access
 ifeq ("$(TEST_SCENARIO)","updates-testing")
 VM_CUSTOMIZE_FLAGS += --run-command 'dnf -y update --setopt=install_weak_deps=False --enablerepo=updates-testing >&2'
-else ifeq ("$(TEST_SCENARIO)","podman-next")
-VM_CUSTOMIZE_FLAGS += --run-command 'dnf -y copr enable rhcontainerbot/podman-next >&2; dnf -y update --repo "copr*" >&2'
+else ifeq ("$(TEST_SCENARIO)","docker-next")
+VM_CUSTOMIZE_FLAGS += --run-command 'dnf -y copr enable rhcontainerbot/docker-next >&2; dnf -y update --repo "copr*" >&2'
 else
 # default scenario does not install packages
 VM_CUSTOMIZE_FLAGS += --no-network
@@ -167,7 +167,7 @@ $(VM_IMAGE): $(TARFILE) packaging/debian/rules packaging/debian/control packagin
 	if [ "$${TEST_OS%coreos}" != "$$TEST_OS" ] || [ "$${TEST_OS%bootc}" != "$$TEST_OS" ] || [ "$$TEST_OS" = "rhel4edge" ]; then \
 	    bots/image-customize --verbose --fresh --no-network $(VM_CUSTOMIZE_FLAGS) \
 	                         --run-command 'mkdir -p /usr/local/share/cockpit' \
-	                         --upload dist/:/usr/local/share/cockpit/podman \
+	                         --upload dist/:/usr/local/share/cockpit/docker \
 	                         --script $(CURDIR)/test/vm.install $(TEST_OS); \
 	else \
 	    bots/image-customize --verbose --fresh $(VM_CUSTOMIZE_FLAGS) --build $(TARFILE) \
